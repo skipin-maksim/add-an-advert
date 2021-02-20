@@ -1,25 +1,32 @@
-import React, { useState, useEffect } from "react";
-import {
-  CustomInput,
-  TabContent,
-  TabPane,
-  Row,
-  Col,
-  FormGroup,
-  Label,
-  Button,
-} from "reactstrap";
+import React, { useState, useEffect, useCallback } from "react";
+import { TabContent } from "reactstrap";
 
 import FormBlock from "./FormBlock";
-import FormInput from "./Form-components/FormInput";
+import FirstScreen from "./Tab-components/FirstScreen";
+import SecondScreen from "./Tab-components/SecondScreen";
+import ThirdScreen from "./Tab-components/ThirdScreen";
+import FourthScreen from "./Tab-components/FourthScreen";
+import SuccessScren from "./Tab-components/SuccessScren";
 
 export default function Tabs() {
   const [activeTab, setActiveTab] = useState("1");
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [photoList, setPhotoList] = useState([]);
+  const [serviceOne, setServiceOne] = useState(false);
+  const [serviceTwo, setServiceTwo] = useState(false);
+  const [serviceThree, setServiceThree] = useState(false);
+  const [serviceFour, setServiceFour] = useState(false);
+  const [serviceFive, setServiceFive] = useState(false);
+
   const [isDisabledNextBtn, setIsDisabledNextBtn] = useState(true);
-  const [isInvalidInput, setIsInvalidInput] = useState(false);
+  const [isInvalidTitle, setIsInvalidTitle] = useState(false);
+  const [isInvalidPhoneNumber, setIsInvalidPhoneNumber] = useState(false);
+  const [isValidTypePhoto, setIsValidTypePhoto] = useState(true);
 
   const toggleTab = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
@@ -33,98 +40,138 @@ export default function Tabs() {
     setValue(value);
   };
 
+  const allData = {
+    title,
+    description,
+    status,
+    phoneNumber,
+    email,
+    photoList,
+    serviceOne,
+    serviceTwo,
+    serviceThree,
+    serviceFour,
+    serviceFive,
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(allData);
+
+    toggleTab("5");
+  };
+
+  const validationTypePhotoList = useCallback((files) => {
+    const fileTypes = ["image/jpeg", "image/pjpeg", "image/png"];
+
+    for (let key in files) {
+      if (Number(key) || key === "0") {
+        return fileTypes.includes(files[key].type);
+      }
+    }
+  }, []);
+
   useEffect(() => {
-    title.length >= 3
+    activeTab === "1" && title.length >= 3
       ? setIsDisabledNextBtn(false)
       : setIsDisabledNextBtn(true);
-  }, [description, isDisabledNextBtn, status, title]);
+  }, [activeTab, isDisabledNextBtn, title.length]);
 
-  const isValidInput = () => {
-    title.length < 3 ? setIsInvalidInput(true) : setIsInvalidInput(false);
+  useEffect(() => {
+    if (activeTab === "2" && phoneNumber) setIsDisabledNextBtn(false);
+    if (activeTab === "2" && phoneNumber.length < 5) setIsDisabledNextBtn(true);
+  }, [activeTab, isDisabledNextBtn, phoneNumber]);
+
+  useEffect(() => {
+    if (activeTab === "3") setIsDisabledNextBtn(false);
+
+    if (photoList.length > 0) {
+      const isValidPhoto = validationTypePhotoList(photoList);
+      setIsValidTypePhoto(isValidPhoto);
+
+      isValidPhoto ? setIsDisabledNextBtn(false) : setIsDisabledNextBtn(true);
+
+      activeTab === "3" && isValidTypePhoto && photoList.length <= 5
+        ? setIsDisabledNextBtn(false)
+        : setIsDisabledNextBtn(true);
+    }
+  }, [
+    activeTab,
+    isDisabledNextBtn,
+    validationTypePhotoList,
+    photoList,
+    photoList.length,
+    isValidTypePhoto,
+  ]);
+
+  const isValidTitle = () => {
+    title.length < 3 ? setIsInvalidTitle(true) : setIsInvalidTitle(false);
+  };
+
+  const isValidPhoneNumber = () => {
+    phoneNumber.length < 5
+      ? setIsInvalidPhoneNumber(true)
+      : setIsInvalidPhoneNumber(false);
   };
 
   return (
     <FormBlock>
-      <TabContent activeTab={activeTab}>
-        <TabPane tabId="1" style={{ padding: "25px 0" }}>
-          <FormInput
-            errorText="Minimum 3 characters"
-            isInvalidInput={isInvalidInput}
-            onChangeInput={onChangeInput}
-            isValidInput={isValidInput}
-            labelTitle="Title"
-            id="title"
-            name="title"
-            type="text"
-            data={title}
-            setData={setTitle}
-          />
+      <TabContent activeTab={activeTab} style={{ padding: "25px 0" }}>
+        <FirstScreen
+          isInvalidTitle={isInvalidTitle}
+          onChangeInput={onChangeInput}
+          isValidTitle={isValidTitle}
+          title={title}
+          setTitle={setTitle}
+          description={description}
+          setDescription={setDescription}
+          toggleInput={toggleInput}
+          status={status}
+          setStatus={setStatus}
+          toggleTab={toggleTab}
+          setIsDisabledNextBtn={setIsDisabledNextBtn}
+          isDisabledNextBtn={isDisabledNextBtn}
+          serviceOne={serviceOne}
+          setServiceOne={setServiceOne}
+        />
 
-          <FormInput
-            onChangeInput={onChangeInput}
-            labelTitle="Description"
-            id="description"
-            name="description"
-            type="textarea"
-            data={description}
-            setData={setDescription}
-          />
+        <SecondScreen
+          isInvalidPhoneNumber={isInvalidPhoneNumber}
+          onChangeInput={onChangeInput}
+          isValidPhoneNumber={isValidPhoneNumber}
+          phoneNumber={phoneNumber}
+          setPhoneNumber={setPhoneNumber}
+          email={email}
+          setEmail={setEmail}
+          toggleTab={toggleTab}
+          isDisabledNextBtn={isDisabledNextBtn}
+        />
 
-          <FormGroup row>
-            <Col xs="12">
-              <Label for="status" check>
-                Status: off | on
-              </Label>
-            </Col>
+        <ThirdScreen
+          toggleTab={toggleTab}
+          isDisabledNextBtn={isDisabledNextBtn}
+          photoList={photoList}
+          setPhotoList={setPhotoList}
+          isValidTypePhoto={isValidTypePhoto}
+        />
 
-            <Col xs="1">
-              <CustomInput
-                type="checkbox"
-                id="status"
-                name="status"
-                checked={status}
-                onChange={() => toggleInput(status, setStatus)}
-              />
-            </Col>
-          </FormGroup>
+        <FourthScreen
+          toggleInput={toggleInput}
+          toggleTab={toggleTab}
+          serviceOne={serviceOne}
+          setServiceOne={setServiceOne}
+          serviceTwo={serviceTwo}
+          setServiceTwo={setServiceTwo}
+          serviceThree={serviceThree}
+          setServiceThree={setServiceThree}
+          serviceFour={serviceFour}
+          setServiceFour={setServiceFour}
+          serviceFive={serviceFive}
+          setServiceFive={setServiceFive}
+          handleSubmit={handleSubmit}
+        />
 
-          <Row>
-            <Col
-              xs={{ size: 4, offset: 8 }}
-              md={{ size: 3, offset: 9 }}
-              lg={{ size: 2, offset: 10 }}
-            >
-              <Button
-                block={true}
-                color="primary"
-                onClick={() => {
-                  toggleTab("2");
-                }}
-                disabled={isDisabledNextBtn}
-              >
-                next
-              </Button>
-            </Col>
-          </Row>
-        </TabPane>
-
-        <TabPane tabId="2">
-          <Row>
-            <Col sm="6">2</Col>
-          </Row>
-        </TabPane>
-
-        <TabPane tabId="3">
-          <Row>
-            <Col sm="6">3</Col>
-          </Row>
-        </TabPane>
-
-        <TabPane tabId="4">
-          <Row>
-            <Col sm="6">4</Col>
-          </Row>
-        </TabPane>
+        <SuccessScren />
       </TabContent>
     </FormBlock>
   );
