@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Button } from "reactstrap";
+import { Row, Col } from "reactstrap";
 import NexBtn from "./Buttons/NexBtn";
 import PrevBtn from "./Buttons/PrevBtn";
 import SaveBtn from "./Buttons/SaveBtn";

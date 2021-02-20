@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  CustomInput,
-  TabContent,
-  TabPane,
-  Row,
-  Col,
-  FormGroup,
-  Label,
-  Button,
-} from "reactstrap";
+import { TabPane } from "reactstrap";
 
 import FormInput from "../Form-components/FormInput";
 import RowButtons from "../RowButtons";

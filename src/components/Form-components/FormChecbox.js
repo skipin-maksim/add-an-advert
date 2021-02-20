@@ -1,5 +1,5 @@
 import React from "react";
-import { CustomInput, TabPane, Col, FormGroup, Label } from "reactstrap";
+import { CustomInput, FormGroup } from "reactstrap";
 
 export default function FormChecbox({
   name,

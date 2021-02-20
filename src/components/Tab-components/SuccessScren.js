@@ -1,5 +1,5 @@
 import React from "react";
-import { TabPane, Row, Col } from "reactstrap";
+import { TabPane } from "reactstrap";
 
 export default function SuccessScren() {
   return (
