@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { TabContent } from "reactstrap";
 
 import FormBlock from "./FormBlock";
+import NavigationBlock from "./Tab-components/NavigationBlock";
 import FirstScreen from "./Tab-components/FirstScreen";
 import SecondScreen from "./Tab-components/SecondScreen";
 import ThirdScreen from "./Tab-components/ThirdScreen";
@@ -116,6 +117,8 @@ export default function Tabs() {
 
   return (
     <FormBlock>
+      <NavigationBlock activeTab={activeTab} />
+
       <TabContent activeTab={activeTab} style={{ padding: "25px 0" }}>
         <FirstScreen
           isInvalidTitle={isInvalidTitle}
