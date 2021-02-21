@@ -38,7 +38,7 @@ export default function ThirdScreen({
             multiple
             accept="image/png, image/jpeg"
             innerRef={textInput}
-            invalid={photoListErr}
+            invalid={photoListErr || !isValidTypePhoto}
             onChange={() => setPhotoList(textInput.current.files)}
           />
           <FormText color={photoListErr ? "danger" : "secondary"}>
