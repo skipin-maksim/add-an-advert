@@ -33,6 +33,7 @@ export default function FormInput({
           autoComplete="off"
           onBlur={isValidInput}
           onChange={({ target }) => onChangeInput(target.value, setData)}
+          style={{ resize: "none" }}
         />
         <FormFeedback>{errorText}</FormFeedback>
       </Col>

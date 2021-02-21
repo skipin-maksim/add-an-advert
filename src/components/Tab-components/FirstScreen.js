@@ -17,10 +17,7 @@ export default function FirstScreen({
   status,
   setStatus,
   toggleTab,
-  setIsDisabledNextBtn,
   isDisabledNextBtn,
-  serviceOne,
-  setServiceOne,
 }) {
   return (
     <TabPane tabId="1" className="tab-pane">
