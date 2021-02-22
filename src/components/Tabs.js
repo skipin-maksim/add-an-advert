@@ -76,25 +76,29 @@ export default function Tabs() {
     activeTab === "1" && title.length >= 3
       ? setIsDisabledNextBtn(false)
       : setIsDisabledNextBtn(true);
-  }, [activeTab, isDisabledNextBtn, title.length]);
+  }, [activeTab, isDisabledNextBtn, isValidTypePhoto, title.length]);
 
   useEffect(() => {
     if (activeTab === "2" && phoneNumber) setIsDisabledNextBtn(false);
     if (activeTab === "2" && phoneNumber.length < 5) setIsDisabledNextBtn(true);
-  }, [activeTab, isDisabledNextBtn, phoneNumber]);
+    if (activeTab === "2" && !isValidTypePhoto) setIsDisabledNextBtn(false);
+  }, [activeTab, isDisabledNextBtn, isValidTypePhoto, phoneNumber]);
 
   useEffect(() => {
     if (activeTab === "3") setIsDisabledNextBtn(false);
 
-    if (photoList.length > 0) {
+    if (activeTab === "3" && photoList.length > 0) {
       const isValidPhoto = validationTypePhotoList(photoList);
       setIsValidTypePhoto(isValidPhoto);
 
-      isValidPhoto ? setIsDisabledNextBtn(false) : setIsDisabledNextBtn(true);
-
-      activeTab === "3" && isValidTypePhoto && photoList.length <= 5
+      isValidTypePhoto
         ? setIsDisabledNextBtn(false)
         : setIsDisabledNextBtn(true);
+
+      if (isValidTypePhoto && photoList.length <= 5)
+        setIsDisabledNextBtn(false);
+
+      if (isValidTypePhoto && photoList.length > 5) setIsDisabledNextBtn(true);
     }
   }, [
     activeTab,
